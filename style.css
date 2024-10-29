@@ -8,22 +8,22 @@ body, html {
     height: 100vh;
     overflow: hidden;
     background-color: #c1d0df;
-    background-image: url('giphy.gif'); /* Corrected syntax */
+    background-image: url('giphy.gif'); 
    
-    background-position: center; /* Centers the background image */
+    background-position: center; 
 }
 
 .info-box h2 {
     margin-top: 10;
-    font-family: fantasy;
+    font-family: "Papyrus", "Comic Sans MS", fantasy, sans-serif;
 }
 
 .info-box a {
-    color: #EAD196; /* Change text color to white */
+    color: #EAD196; 
     text-decoration: none;
     display: inline-block;
     margin: 3px 0;
-    font-family: sans-serif;
+    font-family: "Arial", sans-serif;
 }
 
 .container {
@@ -31,12 +31,12 @@ body, html {
     position: relative;
     max-width: 800px;
     width: 90%;
-    background-color: transparent; /* Make background fully transparent */
+    background-color: transparent;
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    color: rgb(255, 255, 255); /* Ensure text is readable against the GIF */
-    font-family: fantasy;
+    color: rgb(255, 255, 255);
+    font-family: "Papyrus", "Comic Sans MS", fantasy, sans-serif;
  
 }
 
@@ -77,7 +77,6 @@ footer {
     transition: opacity 0.5s;
 }
 
-/* Additional styles for better readability */
 h3 {
     color: #507687;
 }
@@ -85,12 +84,12 @@ h3 {
 p {
     color: #507687;
     line-height: 1.2;
-    font-family: fantasy;
+    font-family: "Papyrus", "Comic Sans MS", fantasy, sans-serif;
     
 }
 
 #info-box {
-    display: none; /* Hide the info box initially */
+    display: none; 
 }
 
 
@@ -105,7 +104,7 @@ p {
 
   
   button[type="submit"]:hover {
-    background-color: #BF3131; /* Change background color on hover */
+    background-color: #BF3131; 
   }
 
   .photo-container {
