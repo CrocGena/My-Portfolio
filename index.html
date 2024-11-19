@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Geno's Portfolio</title>
+   
+
+    <link rel="stylesheet" type="text/css" href="style.css">
+    
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <img src="cowboy-bebop-bang.gif" alt="Animated character from Cowboy Bebop" class="character-image">
+            <nav class="nav-links">
+                <a id="about-link" href="#about">• About •</a>
+             
+                <a id="links-link" href="#links">• Links •</a>
+                <a id="contact-link" href="#contact">• Contact •</a>
+            </nav>
+        </header>
+
+        <main>
+            <section id="about" class="info-box">
+               
+                
+                
+                <p>Welcome to my cosmic corner!</p>
+
+             
+               
+                <p><a href="https://www.facebook.com/geno.lomsadze">Facebook</a></p> 
+                <p><a href="https://www.linkedin.com/in/geno-lomsadze-a742b4220">Linkedin</a></p>
+            </section>
+
+            <section id="contact" class="info-box" style="display: none;">
+                <h2>Get in touch!</h2>
+                <form action="https://formspree.io/f/meojbryb" method="POST" id="contact-form">
+                    <label for="name">Name:</label>
+                    <input type="text" id="name" name="name" placeholder="Your name" required aria-required="true">
+
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" name="email" placeholder="Your email" required aria-required="true" >
+
+                    <label for="message">Message:</label>
+                    <textarea id="message"  name="message" placeholder="Write your message..." required
+                        aria-required="true"></textarea>
+
+                        <button type="submit" style="z-index: 1;">Send</button>
+                </form>
+            </section>
+
+
+            <section id="links" class="info-box" style="display: none;">
+                <h2>Links</h2>
+                <p><a href="https://github.com/CrocGena" >Github</a> </p>
+                <p> <a href="https://open.spotify.com/user/q3wthpsxd6o8l41x41gr3s26v?si=d9568e4bbf3e45b2" >Spotify</a></p>        
+                <p>  <a href="https://boxd.it/7iCvh" >Letterboxd</a></p>
+                
+            
+            
+            </section>
+        </main>
+
+        <footer>
+            <p>&copy; 2024 Geno's Portfolio. All rights reserved.</p>
+        </footer>
+    </div>
+    <div class="photo-container">
+        <img src="racket.png" class="photo" onclick="playMusic()" alt="Racket">
+    </div>
+
+
+    <audio id="background-music" src="Tank.mp3"></audio>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
+
+
+
