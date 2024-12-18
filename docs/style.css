@@ -1,24 +1,26 @@
 body, html {
     margin: 0;
     padding: 0;
-    font-family: Arial, sans-serif;
+    font-family: 'Arial', 'Helvetica', sans-serif; 
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
-    overflow: hidden;
-    background-color: #c1d0df;
+    height: 100vh; 
+    min-height: 100vh; 
+    overflow: hidden; 
+    background-color: #c1d0df; 
     background-image: url('background.gif'); 
     background-position: center; 
     background-repeat: no-repeat; 
-    background-size: cover;
+    background-size: cover; 
     position: relative; 
     z-index: 1; 
-}
+    background-attachment: fixed; 
+  }
 
 .info-box h2 {
     margin-top: 10px;
-    font-family: "Comic Sans MS", fantasy, sans-serif;
+    font-family: "Comic Sans MS";
 }
 
 .info-box a {
@@ -26,7 +28,7 @@ body, html {
     text-decoration: none;
     display: inline-block;
     margin: 3px 0;
-    font-family: "Comic Sans MS", fantasy, sans-serif;
+    font-family: "Comic Sans MS";
 }
 
 .container {
@@ -34,14 +36,15 @@ body, html {
     position: relative;
     max-width: 800px;
     width: 90%;
-    background-color: transparent;
+    background-color: rgba(0, 0, 0, 0.6); 
     padding: 20px;
     border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    color: rgb(255, 255, 255);
-    font-family: "Comic Sans MS", fantasy, sans-serif;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); 
+    color: rgb(255, 255, 255); 
+    font-family: "Comic Sans MS", cursive, sans-serif; 
     z-index: 2; 
-}
+  }
+
 
 
 footer {
@@ -88,7 +91,7 @@ h3 {
 p {
     color: #507687;
     line-height: 1.2;
-    font-family: "Comic Sans MS", fantasy, sans-serif;
+    font-family: "Comic Sans MS";
     
 }
 
@@ -101,7 +104,7 @@ p {
     display: flex;
     flex-direction: column;
     gap: 15px;
-    font-family:  "Comic Sans MS", fantasy, sans-serif;
+    font-family:  "Comic Sans MS";
 }
 
 
@@ -124,7 +127,7 @@ p {
   position: absolute; 
   width: 110px; 
   height: 110px; 
-  background: url('dvd.png') no-repeat center center; 
+  background: url('dvd.png') no-repeat center ; 
   background-size: contain; 
   z-index: 10; 
 }
