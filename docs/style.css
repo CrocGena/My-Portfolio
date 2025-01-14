@@ -40,10 +40,10 @@ body, html {
   position: relative;
   max-width: 800px;
   width: 90%;
-  background-color: rgba(0, 0, 0, 0.6);
+  background-color: rgba(141, 140, 140, 0.273);
   padding: 20px;
   border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0 10px rgba(141, 140, 140, 0.273);
   color: rgb(255, 255, 255);
   font-family: "Comic Sans MS";
   z-index: 2;
