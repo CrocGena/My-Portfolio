@@ -1,133 +1,127 @@
 body, html {
-    margin: 0;
-    padding: 0;
-    font-family: 'Arial', 'Helvetica', sans-serif; 
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh; 
-    min-height: 100vh; 
-    overflow: hidden; 
-    background-color: #c1d0df; 
-    background-image: url('background.gif'); 
-    background-position: center; 
-    background-repeat: no-repeat; 
-    background-size: cover; 
-    position: relative; 
-    z-index: 1; 
-    background-attachment: fixed; 
-  }
+  margin: 0;
+  padding: 0;
+  font-family: "Comic Sans MS";
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  min-height: 100vh;
+  overflow: hidden;
+  background-color: #c1d0df;
+  position: relative;
+  z-index: 1;
+}
 
+#background-video {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: -1;
+}
 .info-box h2 {
-    margin-top: 10px;
-    font-family: "Comic Sans MS";
+  margin-top: 10px;
+  font-family: "Comic Sans MS";
 }
 
 .info-box a {
-    color: #EAD196; 
-    text-decoration: none;
-    display: inline-block;
-    margin: 3px 0;
-    font-family: "Comic Sans MS";
+  color: #EAD196;
+  text-decoration: none;
+  display: inline-block;
+  margin: 3px 0;
+  font-family: "Comic Sans MS";
 }
 
 .container {
-    text-align: center;
-    position: relative;
-    max-width: 800px;
-    width: 90%;
-    background-color: rgba(0, 0, 0, 0.6); 
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); 
-    color: rgb(255, 255, 255); 
-    font-family: "Comic Sans MS", cursive, sans-serif; 
-    z-index: 2; 
-  }
-
-
+  text-align: center;
+  position: relative;
+  max-width: 800px;
+  width: 90%;
+  background-color: rgba(0, 0, 0, 0.6);
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  color: rgb(255, 255, 255);
+  font-family: "Comic Sans MS";
+  z-index: 2;
+}
 
 footer {
-    position: absolute;
-    bottom: -70px;
-    left: 0;
-    width: 100%;
-    text-align: center;
-  
-  }
-
-
+  position: absolute;
+  bottom: -70px;
+  left: 0;
+  width: 100%;
+  text-align: center;
+}
 
 .character-image {
-    width: 250px;
-    height: auto;
-    margin-bottom: 20px;
+  width: 250px;
+  height: auto;
+  margin-bottom: 20px;
 }
 
 .nav-links {
-    margin-top: 20px;
+  margin-top: 20px;
 }
 
 .nav-links a {
-    color: #BF3131;
-    text-decoration: none;
-    margin: 0 10px;
-    font-weight: bold;
-    cursor: pointer;
+  color: #BF3131;
+  text-decoration: none;
+  margin: 0 10px;
+  font-weight: bold;
+  cursor: pointer;
 }
 
-
 .content-section {
-    margin-top: 20px;
-    text-align: left;
-    display: none;
-    transition: opacity 0.5s;
+  margin-top: 20px;
+  text-align: left;
+  display: none;
+  transition: opacity 0.5s;
 }
 
 h3 {
-    color: #507687;
+  color: #507687;
 }
 
 p {
-    color: #507687;
-    line-height: 1.2;
-    font-family: "Comic Sans MS";
-    
+  color: #507687;
+  line-height: 1.2;
+  font-family: "Comic Sans MS";
 }
 
 #info-box {
-    display: none; 
+  display: none;
 }
-
 
 #contact-form {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-    font-family:  "Comic Sans MS";
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  font-family: "Comic Sans MS";
 }
 
+button[type="submit"]:hover {
+  background-color: #BF3131;
+}
 
-
-  
-  button[type="submit"]:hover {
-    background-color: #BF3131; 
-  }
-
-  .photo-container {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-    z-index: 0; }
+.photo-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  z-index: 0;
+}
 
 .photo {
-  position: absolute; 
-  width: 110px; 
-  height: 110px; 
-  background: url('dvd.png') no-repeat center ; 
-  background-size: contain; 
-  z-index: 10; 
+  position: absolute;
+  width: 110px;
+  height: 110px;
+  background: url('dvd.png') no-repeat center;
+  background-size: contain;
+  z-index: 10;
 }
