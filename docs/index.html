@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Geno's Portfolio</title>
+   
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="style.css">
+    
+</head>
+<body>
+    <video id="background-video" autoplay muted loop playsinline>
+        <source src="./background.mp4" type="video/mp4">
+    </video>
+    <div class="container">
+        <header>
+            <img src="girl.gif" alt="Animated character " class="character-image">
+            <nav class="nav-links">
+                <a id="about-link" href="#about">• About •</a>
+                <a id="links-link" href="#links">• Links •</a>
+                <a id="contact-link" href="#contact">• Contact •</a>
+            </nav>
+        </header>
+        <main>
+            <section id="about" class="info-box">        
+                <p>Welcome to my hot corner!</p>
+                <p><a href="https://www.instagram.com/geno_lomsadze?igsh=MWowOHdlM3pyZmVtNA%3D%3D&utm_source=qr">Instagram</a></p> 
+                <p><a href="https://www.linkedin.com/in/geno-lomsadze-a742b4220">Linkedin</a></p>
+            </section>
+            <section id="contact" class="info-box" style="display: none;">
+                <h2>Get in touch!</h2>
+                <form action="https://formspree.io/f/meojbryb" method="POST" id="contact-form">
+                    <label for="name">Name:</label>
+                    <input type="text" id="name" name="name" placeholder="Your name" required aria-required="true">
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" name="email" placeholder="Your email" required aria-required="true" >
+                    <label for="message">Message:</label>
+                    <textarea id="message"  name="message" placeholder="Write your message..." required
+                        aria-required="true"></textarea>
+                        <button type="submit" style="z-index: 1;">Send</button>
+                </form>
+            </section>
+            <section id="links" class="info-box" style="display: none;">
+                <h2>Links</h2>
+                <p><a href="https://github.com/CrocGena" >Github</a> </p>
+                <p> <a href="https://open.spotify.com/user/q3wthpsxd6o8l41x41gr3s26v?si=d9568e4bbf3e45b2" >Spotify</a></p>        
+                <p>  <a href="https://boxd.it/7iCvh" >Letterboxd</a></p>
+                
+              
+            </section>
+        </main>
+        <footer>
+            <p>&copy; 2024 Geno's Portfolio. All rights reserved.</p>
+        </footer>
+    </div>
+   <div class="photo-container">
+    <div id="dvd-logo" class="photo" onclick="playMusic()" title="Click to Play/Pause Music"></div>
+</div>
+    <audio id="background-music" src="Lipps.mp3"></audio>
+    <audio id="character-music" src="Ricky_Martin.mp3"></audio>
+    <script src="script.js"></script>
+</body>
+</html>
