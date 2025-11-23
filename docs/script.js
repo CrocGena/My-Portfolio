@@ -96,28 +96,36 @@ function startDvdBounce() {
   });
 }
 
-// Simple and direct video autoplay
-function initBackgroundVideo() {
+// Aggressive video autoplay for mobile
+function forcePlayVideo() {
   const video = document.getElementById('background-video');
   if (!video) return;
   
-  // Set all required properties
+  // Ensure all properties are set
   video.muted = true;
   video.defaultMuted = true;
   video.volume = 0;
-  video.autoplay = true;
-  video.playsInline = true;
-  video.loop = true;
+  video.setAttribute('muted', '');
+  video.setAttribute('playsinline', '');
   
-  // Force play
-  video.play().catch(err => {
-    console.log('Video play error:', err);
-    // Retry after a short delay
-    setTimeout(() => {
-      video.play().catch(e => console.log('Retry failed:', e));
-    }, 100);
-  });
+  // Try to play
+  const playPromise = video.play();
+  if (playPromise !== undefined) {
+    playPromise.catch(error => {
+      console.log('Autoplay blocked:', error);
+    });
+  }
 }
+
+// Try to play video as early as possible
+(function() {
+  const video = document.getElementById('background-video');
+  if (video) {
+    video.muted = true;
+    video.volume = 0;
+    video.play().catch(() => {});
+  }
+})();
 
 window.addEventListener('DOMContentLoaded', () => {
   const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -125,8 +133,12 @@ window.addEventListener('DOMContentLoaded', () => {
     startDvdBounce();
   }
 
-  // Initialize video
-  initBackgroundVideo();
+  // Force video play
+  forcePlayVideo();
+  
+  // Try again after a delay
+  setTimeout(forcePlayVideo, 500);
+  setTimeout(forcePlayVideo, 1000);
 
   // Pause background if user prefers reduced motion
   if (prefersReducedMotion) {
@@ -142,12 +154,17 @@ window.addEventListener('DOMContentLoaded', () => {
   }
 });
 
-// Also try to play when page becomes visible
+// Try to play on page load
+window.addEventListener('load', forcePlayVideo);
+
+// Try to play when page becomes visible
 document.addEventListener('visibilitychange', () => {
   if (!document.hidden) {
-    const video = document.getElementById('background-video');
-    if (video && video.paused) {
-      video.play().catch(e => console.log('Play on visibility change failed:', e));
-    }
+    forcePlayVideo();
   }
+});
+
+// Try to play on first user interaction
+['touchstart', 'touchend', 'mousedown', 'keydown'].forEach(event => {
+  document.addEventListener(event, forcePlayVideo, { once: true, passive: true });
 });
