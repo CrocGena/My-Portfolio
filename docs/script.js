@@ -89,6 +89,26 @@ window.addEventListener('DOMContentLoaded', () => {
     startDvdBounce();
   }
 
+  // Show background GIF on load, then switch to video after 3 seconds
+  const bgGif = document.getElementById('background-gif');
+  const bgVideo = document.getElementById('background-video');
+
+  if (bgGif && bgVideo) {
+    // Show GIF initially
+    bgGif.style.display = 'block';
+    bgVideo.style.display = 'none';
+
+    // Switch to video after 3 seconds
+    setTimeout(() => {
+      bgGif.style.display = 'none';
+      bgVideo.style.display = 'block';
+      // Ensure video plays
+      if (!prefersReducedMotion) {
+        bgVideo.play().catch(e => console.log('Video play failed:', e));
+      }
+    }, 3000);
+  }
+
   // Pause background video if user prefers reduced motion
   if (prefersReducedMotion) {
     const bgVideo = document.getElementById('background-video');
