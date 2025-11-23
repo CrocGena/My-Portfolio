@@ -71,9 +71,11 @@ function startDvdBounce() {
 
     if (x < 0 || x + logoWidth > screenWidth) {
       xSpeed *= -1;
+      x = Math.max(0, Math.min(x, screenWidth - logoWidth));
     }
     if (y < 0 || y + logoHeight > screenHeight) {
       ySpeed *= -1;
+      y = Math.max(0, Math.min(y, screenHeight - logoHeight));
     }
 
     logo.style.transform = `translate(${x}px, ${y}px)`;
@@ -81,6 +83,25 @@ function startDvdBounce() {
   }
 
   requestAnimationFrame(updatePosition);
+  
+  // Handle window resize to keep DVD logo in bounds
+  window.addEventListener('resize', () => {
+    const screenWidth = window.innerWidth;
+    const screenHeight = window.innerHeight;
+    const logoWidth = logo.offsetWidth;
+    const logoHeight = logo.offsetHeight;
+    
+    x = Math.max(0, Math.min(x, screenWidth - logoWidth));
+    y = Math.max(0, Math.min(y, screenHeight - logoHeight));
+  });
+}
+
+// Function to force video play on iOS
+function forceVideoPlay() {
+  const bgVideo = document.getElementById('background-video');
+  if (bgVideo && bgVideo.paused) {
+    bgVideo.play().catch(e => console.log('Video play attempt:', e));
+  }
 }
 
 window.addEventListener('DOMContentLoaded', () => {
@@ -89,31 +110,41 @@ window.addEventListener('DOMContentLoaded', () => {
     startDvdBounce();
   }
 
-  // Force video to play on mobile devices
+  // Force video to play on mobile devices - Enhanced for iPhone
   const bgVideo = document.getElementById('background-video');
   if (bgVideo) {
     // Set video properties for mobile compatibility
     bgVideo.muted = true;
     bgVideo.playsInline = true;
-    bgVideo.setAttribute('webkit-playsinline', 'true');
+    bgVideo.setAttribute('webkit-playsinline', 'webkit-playsinline');
+    bgVideo.setAttribute('playsinline', 'playsinline');
+    bgVideo.defaultMuted = true;
     
-    // Try to play the video
-    const playPromise = bgVideo.play();
-    if (playPromise !== undefined) {
-      playPromise.catch(error => {
-        console.log('Auto-play was prevented, attempting to play on user interaction');
-        // If autoplay fails, try to play on first user interaction
-        document.addEventListener('touchstart', function playOnTouch() {
-          bgVideo.play();
-          document.removeEventListener('touchstart', playOnTouch);
-        }, { once: true });
-        
-        document.addEventListener('click', function playOnClick() {
-          bgVideo.play();
-          document.removeEventListener('click', playOnClick);
-        }, { once: true });
-      });
-    }
+    // Load the video
+    bgVideo.load();
+    
+    // Multiple attempts to play video
+    setTimeout(() => {
+      const playPromise = bgVideo.play();
+      if (playPromise !== undefined) {
+        playPromise.catch(error => {
+          console.log('Auto-play was prevented, attempting to play on user interaction');
+        });
+      }
+    }, 100);
+    
+    // Try to play on any user interaction
+    const playEvents = ['touchstart', 'touchend', 'click', 'scroll'];
+    playEvents.forEach(eventType => {
+      document.addEventListener(eventType, forceVideoPlay, { once: true, passive: true });
+    });
+    
+    // Also try when page becomes visible
+    document.addEventListener('visibilitychange', () => {
+      if (!document.hidden) {
+        forceVideoPlay();
+      }
+    });
   }
 
   // Pause background video if user prefers reduced motion
