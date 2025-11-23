@@ -96,55 +96,50 @@ function startDvdBounce() {
   });
 }
 
-// Function to force video play on iOS
-function forceVideoPlay() {
-  const bgVideo = document.getElementById('background-video');
-  if (bgVideo && bgVideo.paused) {
-    bgVideo.play().catch(e => console.log('Video play attempt:', e));
-  }
-}
-
 window.addEventListener('DOMContentLoaded', () => {
   const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   if (!prefersReducedMotion) {
     startDvdBounce();
   }
 
-  // Force video to play on mobile devices - Enhanced for iPhone
+  // Handle background video/GIF for all devices including iPhone
   const bgVideo = document.getElementById('background-video');
+  const bgFallback = document.getElementById('background-fallback');
+  
   if (bgVideo) {
-    // Set video properties for mobile compatibility
+    // Set video properties for maximum compatibility
     bgVideo.muted = true;
     bgVideo.playsInline = true;
-    bgVideo.setAttribute('webkit-playsinline', 'webkit-playsinline');
-    bgVideo.setAttribute('playsinline', 'playsinline');
     bgVideo.defaultMuted = true;
+    bgVideo.setAttribute('muted', 'muted');
+    bgVideo.volume = 0;
     
-    // Load the video
-    bgVideo.load();
+    // Try to play video immediately
+    bgVideo.play().then(() => {
+      // Video is playing successfully
+      console.log('Video playing');
+      if (bgFallback) {
+        bgFallback.style.display = 'none';
+      }
+    }).catch((error) => {
+      // Video autoplay failed - show GIF fallback instead
+      console.log('Video autoplay blocked, using GIF fallback');
+      if (bgFallback) {
+        bgFallback.style.display = 'block';
+      }
+      bgVideo.style.display = 'none';
+    });
     
-    // Multiple attempts to play video
+    // Check if video is actually playing after a short delay
     setTimeout(() => {
-      const playPromise = bgVideo.play();
-      if (playPromise !== undefined) {
-        playPromise.catch(error => {
-          console.log('Auto-play was prevented, attempting to play on user interaction');
-        });
+      if (bgVideo.paused || bgVideo.currentTime === 0) {
+        // Video didn't start - use GIF
+        if (bgFallback) {
+          bgFallback.style.display = 'block';
+        }
+        bgVideo.style.display = 'none';
       }
-    }, 100);
-    
-    // Try to play on any user interaction
-    const playEvents = ['touchstart', 'touchend', 'click', 'scroll'];
-    playEvents.forEach(eventType => {
-      document.addEventListener(eventType, forceVideoPlay, { once: true, passive: true });
-    });
-    
-    // Also try when page becomes visible
-    document.addEventListener('visibilitychange', () => {
-      if (!document.hidden) {
-        forceVideoPlay();
-      }
-    });
+    }, 500);
   }
 
   // Pause background video if user prefers reduced motion
@@ -152,6 +147,9 @@ window.addEventListener('DOMContentLoaded', () => {
     if (bgVideo && typeof bgVideo.pause === 'function') {
       bgVideo.pause();
       bgVideo.removeAttribute('autoplay');
+    }
+    if (bgFallback) {
+      bgFallback.style.display = 'none';
     }
   }
 
