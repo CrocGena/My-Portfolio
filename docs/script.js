@@ -102,48 +102,57 @@ window.addEventListener('DOMContentLoaded', () => {
     startDvdBounce();
   }
 
-  // Handle background video - use GIF on mobile devices for guaranteed autoplay
+  // Handle background video for all devices
   const bgVideo = document.getElementById('background-video');
   const bgFallback = document.getElementById('background-fallback');
   
-  // Detect if device is mobile (iPhone, Android, etc.)
-  const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-  
-  if (isMobile) {
-    // On mobile devices, use GIF immediately (always works without user interaction)
-    if (bgFallback) {
-      bgFallback.style.display = 'block';
-    }
-    if (bgVideo) {
-      bgVideo.style.display = 'none';
-    }
-  } else {
-    // On desktop, try to use video
-    if (bgVideo) {
-      bgVideo.muted = true;
-      bgVideo.playsInline = true;
-      bgVideo.defaultMuted = true;
-      bgVideo.volume = 0;
-      
-      bgVideo.play().then(() => {
-        console.log('Video playing on desktop');
+  if (bgVideo) {
+    // Force all properties for iOS compatibility
+    bgVideo.muted = true;
+    bgVideo.defaultMuted = true;
+    bgVideo.playsInline = true;
+    bgVideo.autoplay = true;
+    bgVideo.loop = true;
+    bgVideo.volume = 0;
+    bgVideo.setAttribute('muted', '');
+    bgVideo.setAttribute('playsinline', '');
+    bgVideo.setAttribute('autoplay', '');
+    
+    // Remove and re-add the video element to force reload with correct settings
+    const parent = bgVideo.parentNode;
+    const videoClone = bgVideo.cloneNode(true);
+    parent.replaceChild(videoClone, bgVideo);
+    
+    const newVideo = document.getElementById('background-video');
+    newVideo.muted = true;
+    newVideo.volume = 0;
+    
+    // Load and play
+    newVideo.load();
+    
+    // Try to play immediately
+    const playAttempt = newVideo.play();
+    if (playAttempt !== undefined) {
+      playAttempt.then(() => {
+        console.log('Video is playing');
         if (bgFallback) {
           bgFallback.style.display = 'none';
         }
       }).catch((error) => {
-        console.log('Video failed, using GIF');
+        console.log('Autoplay prevented:', error);
+        // Video autoplay blocked - this should not happen if video is truly muted
         if (bgFallback) {
           bgFallback.style.display = 'block';
         }
-        bgVideo.style.display = 'none';
       });
     }
   }
 
   // Pause background if user prefers reduced motion
   if (prefersReducedMotion) {
-    if (bgVideo && typeof bgVideo.pause === 'function') {
-      bgVideo.pause();
+    const video = document.getElementById('background-video');
+    if (video && typeof video.pause === 'function') {
+      video.pause();
     }
     if (bgFallback) {
       bgFallback.style.display = 'none';
