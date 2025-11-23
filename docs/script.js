@@ -89,42 +89,38 @@ window.addEventListener('DOMContentLoaded', () => {
     startDvdBounce();
   }
 
-  // Mobile video fix - ensure video plays on mobile devices
+  // Force video to play on mobile devices
   const bgVideo = document.getElementById('background-video');
   if (bgVideo) {
-    // Force video to load and play on mobile
-    bgVideo.load();
-
-    // Try to play video, handle mobile autoplay restrictions
-    const playVideo = () => {
-      bgVideo.play().catch(e => {
-        console.log('Autoplay failed, waiting for user interaction:', e);
-        // Add click listener to start video on first user interaction
-        const startVideo = () => {
-          bgVideo.play().catch(e => console.log('Video play failed:', e));
-          document.removeEventListener('click', startVideo);
-          document.removeEventListener('touchstart', startVideo);
-        };
-        document.addEventListener('click', startVideo);
-        document.addEventListener('touchstart', startVideo);
+    // Set video properties for mobile compatibility
+    bgVideo.muted = true;
+    bgVideo.playsInline = true;
+    bgVideo.setAttribute('webkit-playsinline', 'true');
+    
+    // Try to play the video
+    const playPromise = bgVideo.play();
+    if (playPromise !== undefined) {
+      playPromise.catch(error => {
+        console.log('Auto-play was prevented, attempting to play on user interaction');
+        // If autoplay fails, try to play on first user interaction
+        document.addEventListener('touchstart', function playOnTouch() {
+          bgVideo.play();
+          document.removeEventListener('touchstart', playOnTouch);
+        }, { once: true });
+        
+        document.addEventListener('click', function playOnClick() {
+          bgVideo.play();
+          document.removeEventListener('click', playOnClick);
+        }, { once: true });
       });
-    };
-
-    // Small delay to ensure video is ready
-    setTimeout(() => {
-      if (!prefersReducedMotion) {
-        playVideo();
-      }
-    }, 100);
+    }
   }
 
   // Pause background video if user prefers reduced motion
   if (prefersReducedMotion) {
-    const bgVideo = document.getElementById('background-video');
     if (bgVideo && typeof bgVideo.pause === 'function') {
       bgVideo.pause();
       bgVideo.removeAttribute('autoplay');
-      bgVideo.muted = true;
     }
   }
 

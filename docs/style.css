@@ -21,9 +21,6 @@ body, html {
   height: 100%;
   object-fit: cover;
   z-index: -1;
-  /* Mobile optimization */
-  -webkit-transform: translateZ(0);
-  transform: translateZ(0);
 }
 .info-box h2 {
   margin-top: 10px;
