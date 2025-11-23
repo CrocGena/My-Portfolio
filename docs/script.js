@@ -96,57 +96,37 @@ function startDvdBounce() {
   });
 }
 
+// Simple and direct video autoplay
+function initBackgroundVideo() {
+  const video = document.getElementById('background-video');
+  if (!video) return;
+  
+  // Set all required properties
+  video.muted = true;
+  video.defaultMuted = true;
+  video.volume = 0;
+  video.autoplay = true;
+  video.playsInline = true;
+  video.loop = true;
+  
+  // Force play
+  video.play().catch(err => {
+    console.log('Video play error:', err);
+    // Retry after a short delay
+    setTimeout(() => {
+      video.play().catch(e => console.log('Retry failed:', e));
+    }, 100);
+  });
+}
+
 window.addEventListener('DOMContentLoaded', () => {
   const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   if (!prefersReducedMotion) {
     startDvdBounce();
   }
 
-  // Handle background video for all devices
-  const bgVideo = document.getElementById('background-video');
-  const bgFallback = document.getElementById('background-fallback');
-  
-  if (bgVideo) {
-    // Force all properties for iOS compatibility
-    bgVideo.muted = true;
-    bgVideo.defaultMuted = true;
-    bgVideo.playsInline = true;
-    bgVideo.autoplay = true;
-    bgVideo.loop = true;
-    bgVideo.volume = 0;
-    bgVideo.setAttribute('muted', '');
-    bgVideo.setAttribute('playsinline', '');
-    bgVideo.setAttribute('autoplay', '');
-    
-    // Remove and re-add the video element to force reload with correct settings
-    const parent = bgVideo.parentNode;
-    const videoClone = bgVideo.cloneNode(true);
-    parent.replaceChild(videoClone, bgVideo);
-    
-    const newVideo = document.getElementById('background-video');
-    newVideo.muted = true;
-    newVideo.volume = 0;
-    
-    // Load and play
-    newVideo.load();
-    
-    // Try to play immediately
-    const playAttempt = newVideo.play();
-    if (playAttempt !== undefined) {
-      playAttempt.then(() => {
-        console.log('Video is playing');
-        if (bgFallback) {
-          bgFallback.style.display = 'none';
-        }
-      }).catch((error) => {
-        console.log('Autoplay prevented:', error);
-        // Video autoplay blocked - this should not happen if video is truly muted
-        if (bgFallback) {
-          bgFallback.style.display = 'block';
-        }
-      });
-    }
-  }
+  // Initialize video
+  initBackgroundVideo();
 
   // Pause background if user prefers reduced motion
   if (prefersReducedMotion) {
@@ -154,13 +134,20 @@ window.addEventListener('DOMContentLoaded', () => {
     if (video && typeof video.pause === 'function') {
       video.pause();
     }
-    if (bgFallback) {
-      bgFallback.style.display = 'none';
-    }
   }
 
   const characterImage = document.querySelector('.character-image');
   if (characterImage) {
     characterImage.addEventListener('click', playCharacterMusic);
+  }
+});
+
+// Also try to play when page becomes visible
+document.addEventListener('visibilitychange', () => {
+  if (!document.hidden) {
+    const video = document.getElementById('background-video');
+    if (video && video.paused) {
+      video.play().catch(e => console.log('Play on visibility change failed:', e));
+    }
   }
 });
