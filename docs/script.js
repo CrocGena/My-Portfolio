@@ -102,51 +102,48 @@ window.addEventListener('DOMContentLoaded', () => {
     startDvdBounce();
   }
 
-  // Handle background video/GIF for all devices including iPhone
+  // Handle background video - use GIF on mobile devices for guaranteed autoplay
   const bgVideo = document.getElementById('background-video');
   const bgFallback = document.getElementById('background-fallback');
   
-  if (bgVideo) {
-    // Set video properties for maximum compatibility
-    bgVideo.muted = true;
-    bgVideo.playsInline = true;
-    bgVideo.defaultMuted = true;
-    bgVideo.setAttribute('muted', 'muted');
-    bgVideo.volume = 0;
-    
-    // Try to play video immediately
-    bgVideo.play().then(() => {
-      // Video is playing successfully
-      console.log('Video playing');
-      if (bgFallback) {
-        bgFallback.style.display = 'none';
-      }
-    }).catch((error) => {
-      // Video autoplay failed - show GIF fallback instead
-      console.log('Video autoplay blocked, using GIF fallback');
-      if (bgFallback) {
-        bgFallback.style.display = 'block';
-      }
+  // Detect if device is mobile (iPhone, Android, etc.)
+  const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+  
+  if (isMobile) {
+    // On mobile devices, use GIF immediately (always works without user interaction)
+    if (bgFallback) {
+      bgFallback.style.display = 'block';
+    }
+    if (bgVideo) {
       bgVideo.style.display = 'none';
-    });
-    
-    // Check if video is actually playing after a short delay
-    setTimeout(() => {
-      if (bgVideo.paused || bgVideo.currentTime === 0) {
-        // Video didn't start - use GIF
+    }
+  } else {
+    // On desktop, try to use video
+    if (bgVideo) {
+      bgVideo.muted = true;
+      bgVideo.playsInline = true;
+      bgVideo.defaultMuted = true;
+      bgVideo.volume = 0;
+      
+      bgVideo.play().then(() => {
+        console.log('Video playing on desktop');
+        if (bgFallback) {
+          bgFallback.style.display = 'none';
+        }
+      }).catch((error) => {
+        console.log('Video failed, using GIF');
         if (bgFallback) {
           bgFallback.style.display = 'block';
         }
         bgVideo.style.display = 'none';
-      }
-    }, 500);
+      });
+    }
   }
 
-  // Pause background video if user prefers reduced motion
+  // Pause background if user prefers reduced motion
   if (prefersReducedMotion) {
     if (bgVideo && typeof bgVideo.pause === 'function') {
       bgVideo.pause();
-      bgVideo.removeAttribute('autoplay');
     }
     if (bgFallback) {
       bgFallback.style.display = 'none';
