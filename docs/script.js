@@ -96,12 +96,16 @@ function startDvdBounce() {
   });
 }
 
-// Aggressive video autoplay for mobile
-function forcePlayVideo() {
+// Video autoplay handler
+let videoStarted = false;
+
+function startVideo() {
   const video = document.getElementById('background-video');
+  const tapOverlay = document.getElementById('tap-to-start');
+  
   if (!video) return;
   
-  // Ensure all properties are set
+  // Set all required properties
   video.muted = true;
   video.defaultMuted = true;
   video.volume = 0;
@@ -111,34 +115,47 @@ function forcePlayVideo() {
   // Try to play
   const playPromise = video.play();
   if (playPromise !== undefined) {
-    playPromise.catch(error => {
-      console.log('Autoplay blocked:', error);
+    playPromise.then(() => {
+      // Video started successfully
+      videoStarted = true;
+      if (tapOverlay) {
+        tapOverlay.style.display = 'none';
+      }
+      console.log('Video playing');
+    }).catch(error => {
+      // Autoplay blocked - show invisible overlay to capture first touch
+      console.log('Autoplay blocked, waiting for user interaction');
+      if (tapOverlay) {
+        tapOverlay.style.display = 'block';
+      }
     });
   }
 }
 
-// Try to play video as early as possible
-(function() {
-  const video = document.getElementById('background-video');
-  if (video) {
-    video.muted = true;
-    video.volume = 0;
-    video.play().catch(() => {});
-  }
-})();
-
-window.addEventListener('DOMContentLoaded', () => {
+// Try to start video immediately
+document.addEventListener('DOMContentLoaded', () => {
   const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   if (!prefersReducedMotion) {
     startDvdBounce();
   }
 
-  // Force video play
-  forcePlayVideo();
+  // Try to start video
+  startVideo();
   
-  // Try again after a delay
-  setTimeout(forcePlayVideo, 500);
-  setTimeout(forcePlayVideo, 1000);
+  // Try again after delays
+  setTimeout(startVideo, 100);
+  setTimeout(startVideo, 500);
+
+  // Handle tap overlay click
+  const tapOverlay = document.getElementById('tap-to-start');
+  if (tapOverlay) {
+    tapOverlay.addEventListener('click', () => {
+      startVideo();
+    });
+    tapOverlay.addEventListener('touchstart', () => {
+      startVideo();
+    });
+  }
 
   // Pause background if user prefers reduced motion
   if (prefersReducedMotion) {
@@ -154,17 +171,18 @@ window.addEventListener('DOMContentLoaded', () => {
   }
 });
 
-// Try to play on page load
-window.addEventListener('load', forcePlayVideo);
-
-// Try to play when page becomes visible
-document.addEventListener('visibilitychange', () => {
-  if (!document.hidden) {
-    forcePlayVideo();
-  }
+// Capture ANY touch/click on the page to start video
+['touchstart', 'click', 'touchend'].forEach(eventType => {
+  document.addEventListener(eventType, () => {
+    if (!videoStarted) {
+      startVideo();
+    }
+  }, { once: true, passive: true });
 });
 
-// Try to play on first user interaction
-['touchstart', 'touchend', 'mousedown', 'keydown'].forEach(event => {
-  document.addEventListener(event, forcePlayVideo, { once: true, passive: true });
+// Try on page visibility change
+document.addEventListener('visibilitychange', () => {
+  if (!document.hidden && !videoStarted) {
+    startVideo();
+  }
 });
