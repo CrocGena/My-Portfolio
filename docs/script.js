@@ -89,24 +89,33 @@ window.addEventListener('DOMContentLoaded', () => {
     startDvdBounce();
   }
 
-  // Show background GIF on load, then switch to video after 3 seconds
-  const bgGif = document.getElementById('background-gif');
+  // Mobile video fix - ensure video plays on mobile devices
   const bgVideo = document.getElementById('background-video');
+  if (bgVideo) {
+    // Force video to load and play on mobile
+    bgVideo.load();
 
-  if (bgGif && bgVideo) {
-    // Show GIF initially
-    bgGif.style.display = 'block';
-    bgVideo.style.display = 'none';
+    // Try to play video, handle mobile autoplay restrictions
+    const playVideo = () => {
+      bgVideo.play().catch(e => {
+        console.log('Autoplay failed, waiting for user interaction:', e);
+        // Add click listener to start video on first user interaction
+        const startVideo = () => {
+          bgVideo.play().catch(e => console.log('Video play failed:', e));
+          document.removeEventListener('click', startVideo);
+          document.removeEventListener('touchstart', startVideo);
+        };
+        document.addEventListener('click', startVideo);
+        document.addEventListener('touchstart', startVideo);
+      });
+    };
 
-    // Switch to video after 3 seconds
+    // Small delay to ensure video is ready
     setTimeout(() => {
-      bgGif.style.display = 'none';
-      bgVideo.style.display = 'block';
-      // Ensure video plays
       if (!prefersReducedMotion) {
-        bgVideo.play().catch(e => console.log('Video play failed:', e));
+        playVideo();
       }
-    }, 3000);
+    }, 100);
   }
 
   // Pause background video if user prefers reduced motion
