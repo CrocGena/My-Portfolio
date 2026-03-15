@@ -58,10 +58,61 @@ footer {
   text-align: center;
 }
 
+/* Dancer wrapper with hover tooltip */
+.character-wrapper {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+}
+
 .character-image {
   width: 250px;
   height: auto;
+  display: block;
   margin-bottom: 20px;
+}
+
+/* Tooltip hidden by default, shown on hover */
+.touch-tooltip {
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-8px);
+  color: #ffffff;
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-style: italic;
+  font-weight: 600;
+  font-size: 1.3rem;
+  letter-spacing: 0.05em;
+  padding: 6px 14px;
+  border-radius: 20px;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  text-shadow: 0 1px 6px rgba(0,0,0,0.9), 0 0 12px rgba(0,0,0,0.7);
+}
+
+/* ----- DESKTOP: show on mouse hover ----- */
+@media (hover: hover) {
+  .character-wrapper:hover .touch-tooltip {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+/* ----- MOBILE / TOUCH: always visible, softly pulses ----- */
+@media (hover: none) {
+  .touch-tooltip {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+    animation: mobilePulse 2s infinite alternate ease-in-out;
+  }
+}
+
+@keyframes mobilePulse {
+  0%   { opacity: 0.6; transform: translateX(-50%) translateY(0)   scale(1);    }
+  100% { opacity: 1;   transform: translateX(-50%) translateY(-5px) scale(1.05); }
 }
 
 .nav-links {
